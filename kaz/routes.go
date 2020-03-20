@@ -31,18 +31,6 @@ func routes(s *Server) error {
 			}
 			l.Printf("Bound Params: %+v", x)
 
-			//client := &Client{
-			//	VMWareName: "Team 39 DB",
-			//	VMWareId:   1313,
-			//	MacAddress: "92:15:e7:7b:08:20",
-			//	Team:       39,
-			//	Group: Group{
-			//		Name: "DB",
-			//		Tags: []string{"db", "freebsd"},
-			//	},
-			//	CheckedIn: true,
-			//}
-
 			h, err := GetClientByMacAddress(x.MacAddress)
 			if err != nil {
 				c.String(500, "Unable to complete request: %+v", err)

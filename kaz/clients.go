@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -144,7 +145,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 		b, err := Send(u, sessionToken)
 		if err != nil {
 			fmt.Printf("Error With Executing API Request: %+v", err)
-			return Client{}, nil
+			return Client{}, err
 		}
 
 		fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
@@ -229,7 +230,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 			b, err := Send(u, sessionToken)
 			if err != nil {
 				fmt.Printf("Error With Executing API Request: %+v", err)
-				return Client{}, nil
+				return Client{}, err
 			}
 
 			fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
@@ -318,7 +319,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 			b, err := Send(u, sessionToken)
 			if err != nil {
 				fmt.Printf("Error With Executing API Request: %+v", err)
-				return Client{}, nil
+				return Client{}, err
 			}
 
 			fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
@@ -356,11 +357,23 @@ func GetClientByMacAddress(address string) (Client, error) {
 		return Client{}, nil
 	}
 
+	fields := strings.Fields(VirtualMachinesIds[ke])
+
+	if len(fields) < 3 {
+		return Client{}, fmt.Errorf("dat vm name no have enough parts")
+	}
+
+	team, err := strconv.Atoi(fields[1])
+
+	if err != nil {
+		return Client{}, err
+	}
+
 	c := Client{
 		VMWareName: VirtualMachinesIds[ke],
 		VMWareId:   ke,
 		MacAddress: address,
-		Team:       0,
+		Team:       team,
 		Group:      Group{},
 		CheckedIn:  false,
 	}
