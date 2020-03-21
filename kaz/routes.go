@@ -16,8 +16,12 @@ func routes(s *Server) error {
 	}
 
 	r.GET("/", func(c *gin.Context) {
+		var clients []Client
+		s.Db.Where(&Client{CheckedIn: true}).Find(&clients)
+
 		c.HTML(200, "index.html", pongo2.Context{
-			"title": "TEAMS",
+			"title":   "TEAMS",
+			"clients": clients,
 		})
 	})
 
