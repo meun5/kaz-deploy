@@ -144,7 +144,7 @@ func InitializeCache(override bool) error {
 
 		b, err := Send(u, sessionToken)
 		if err != nil {
-			fmt.Printf("Error With Executing API Request: %+v", err)
+			fmt.Printf("Error With Executing API Request: %+v\n", err)
 			return err
 		}
 
@@ -183,7 +183,7 @@ func InitializeCache(override bool) error {
 
 		b, err = Send(u, sessionToken)
 		if err != nil {
-			fmt.Printf("Error With Executing API Request: %+v", err)
+			fmt.Printf("Error With Executing API Request: %+v\n", err)
 			return nil
 		}
 
@@ -198,7 +198,7 @@ func InitializeCache(override bool) error {
 
 		for _, t := range folder.Value {
 			if !strings.HasPrefix(t.Name, TeamFoldersPrefix) {
-				fmt.Printf("Dropping Folder \"%s\" with id %s", t.Name, t.Folder)
+				fmt.Printf("Dropping Folder \"%s\" with id %s\n", t.Name, t.Folder)
 				continue
 			}
 
@@ -229,7 +229,7 @@ func InitializeCache(override bool) error {
 
 			b, err := Send(u, sessionToken)
 			if err != nil {
-				fmt.Printf("Error With Executing API Request: %+v", err)
+				fmt.Printf("Error With Executing API Request: %+v\n", err)
 				return err
 			}
 
@@ -250,7 +250,7 @@ func InitializeCache(override bool) error {
 			fmt.Printf("Returned Data from vCenter: %+v\n", vm)
 			for _, t := range vm.Value {
 				if !strings.HasPrefix(t.Name, TeamVMPrefix) {
-					fmt.Printf("Dropping VM \"%s\" with id %s", t.Name, t.VM)
+					fmt.Printf("Dropping VM \"%s\" with id %s\n", t.Name, t.VM)
 					continue
 				}
 
@@ -274,7 +274,7 @@ func InitializeCache(override bool) error {
 
 			b, err := Send(u, sessionToken)
 			if err != nil {
-				fmt.Printf("Error With Executing API Request: %+v", err)
+				fmt.Printf("Error With Executing API Request: %+v\n", err)
 				return Client{}, nil
 			}
 
@@ -318,7 +318,7 @@ func InitializeCache(override bool) error {
 
 			b, err := Send(u, sessionToken)
 			if err != nil {
-				fmt.Printf("Error With Executing API Request: %+v", err)
+				fmt.Printf("Error With Executing API Request: %+v\n", err)
 				return err
 			}
 
@@ -355,7 +355,7 @@ func GetClientByMacAddress(address string) (*Client, error) {
 	var ke string
 	for k, v := range VirtualMachineNetworkMacs {
 		if v == address {
-			fmt.Printf("VM Id for Mac Address \"%s\" is %s", address, k)
+			fmt.Printf("VM Id for Mac Address \"%s\" is %s\n", address, k)
 			ke = k
 			break
 		}
@@ -394,7 +394,7 @@ func CommitClient(c *Client, s *Server) error {
 		return fmt.Errorf("uninitialized db")
 	}
 
-	s.Logger.Printf("Commiting new Client: (%t) %+v", s.Db.NewRecord(c), c)
+	s.Logger.Printf("Commiting new Client: (%t) %+v\n", s.Db.NewRecord(c), c)
 
 	if s.Db.NewRecord(c) {
 		s.Db.Create(c)
