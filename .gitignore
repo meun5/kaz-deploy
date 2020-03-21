@@ -17,3 +17,6 @@
 # Local sqlite databases
 *.db
 *.sql
+
+# Compiled Asset Files
+static/

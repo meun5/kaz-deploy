@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+/**
+ * Main.scss, Apache 2.0 License
+ * Copyright 2020 Alexander Young <stdin@iastate.edu>
+ */
+
+@import "vendor/bootstrap-4.4.1/functions";
+@import "vendor/bootstrap-4.4.1/variables";
+@import "vendor/bootstrap-4.4.1/mixins";
+
+.bgc-green {
+  background-color: $success;
+}
+
+.bgc-red {
+  background-color: $danger;
+}
