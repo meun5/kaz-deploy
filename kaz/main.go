@@ -2,13 +2,13 @@ package kaz
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-
-	"gitlab.com/go-box/pongo2gin"
 	"log"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	"gitlab.com/go-box/pongo2gin"
 )
 
 type Server struct {

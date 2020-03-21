@@ -2,9 +2,10 @@ package kaz
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/flosch/pongo2"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func routes(s *Server) error {
