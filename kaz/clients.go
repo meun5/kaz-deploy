@@ -38,9 +38,9 @@ const (
 )
 
 var (
-	FoldersIds                = make(map[string]string)
-	VirtualMachinesIds        = make(map[string]string)
-	VirtualMachineNetworkIds  = make(map[string][]int)
+	FoldersIds         = make(map[string]string)
+	VirtualMachinesIds = make(map[string]string)
+	//VirtualMachineNetworkIds  = make(map[string][]int)
 	VirtualMachineNetworkMacs = make(map[string]string)
 
 	sessionToken = getSessionToken()
@@ -313,7 +313,7 @@ func InitializeCache(override bool) error {
 			sessionToken = getSessionToken()
 		}
 
-		for w, _ := range VirtualMachinesIds {
+		for w := range VirtualMachinesIds {
 			u := url.URL{}
 			u.Path = fmt.Sprintf("/rest/vcenter/vm/%s/hardware/ethernet/4000", w)
 
