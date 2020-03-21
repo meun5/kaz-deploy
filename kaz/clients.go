@@ -185,7 +185,7 @@ func InitializeCache(override bool) error {
 		b, err = Send(u, sessionToken)
 		if err != nil {
 			fmt.Printf("Error With Executing API Request: %+v\n", err)
-			return nil
+			return err
 		}
 
 		fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
