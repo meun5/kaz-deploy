@@ -41,6 +41,8 @@ var (
 	VirtualMachinesIds        = make(map[string]string)
 	VirtualMachineNetworkIds  = make(map[string][]int)
 	VirtualMachineNetworkMacs = make(map[string]string)
+
+	sessionToken = getSessionToken()
 )
 
 func InitializeDatabase(s *Server) error {
@@ -126,10 +128,8 @@ func Send(u url.URL, sessionToken string) ([]byte, error) {
 	return b, nil
 }
 
-func GetClientByMacAddress(address string) (Client, error) {
-	var sessionToken string
-
-	if len(FoldersIds) == 0 {
+func InitializeCache(override bool) error {
+	if len(FoldersIds) == 0 || override {
 		if sessionToken == "" {
 			sessionToken = getSessionToken()
 		}
@@ -145,7 +145,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 		b, err := Send(u, sessionToken)
 		if err != nil {
 			fmt.Printf("Error With Executing API Request: %+v", err)
-			return Client{}, err
+			return err
 		}
 
 		fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
@@ -160,7 +160,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 
 		err = json.Unmarshal(b, &folder)
 		if err != nil {
-			return Client{}, err
+			return err
 		}
 
 		fmt.Printf("Returned Data from vCenter: %+v\n", folder)
@@ -184,14 +184,14 @@ func GetClientByMacAddress(address string) (Client, error) {
 		b, err = Send(u, sessionToken)
 		if err != nil {
 			fmt.Printf("Error With Executing API Request: %+v", err)
-			return Client{}, nil
+			return nil
 		}
 
 		fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
 
 		err = json.Unmarshal(b, &folder)
 		if err != nil {
-			return Client{}, err
+			return err
 		}
 
 		fmt.Printf("Returned Data from vCenter: %+v\n", folder)
@@ -210,7 +210,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 	}
 
 	// Get vms in those folders
-	if len(VirtualMachinesIds) == 0 {
+	if len(VirtualMachinesIds) == 0 || override {
 		if sessionToken == "" {
 			sessionToken = getSessionToken()
 		}
@@ -230,7 +230,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 			b, err := Send(u, sessionToken)
 			if err != nil {
 				fmt.Printf("Error With Executing API Request: %+v", err)
-				return Client{}, err
+				return err
 			}
 
 			fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
@@ -244,7 +244,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 
 			err = json.Unmarshal(b, &vm)
 			if err != nil {
-				return Client{}, err
+				return err
 			}
 
 			fmt.Printf("Returned Data from vCenter: %+v\n", vm)
@@ -307,7 +307,7 @@ func GetClientByMacAddress(address string) (Client, error) {
 		}
 	}*/
 
-	if len(VirtualMachineNetworkMacs) == 0 {
+	if len(VirtualMachineNetworkMacs) == 0 || override {
 		if sessionToken == "" {
 			sessionToken = getSessionToken()
 		}
@@ -319,20 +319,20 @@ func GetClientByMacAddress(address string) (Client, error) {
 			b, err := Send(u, sessionToken)
 			if err != nil {
 				fmt.Printf("Error With Executing API Request: %+v", err)
-				return Client{}, err
+				return err
 			}
 
 			fmt.Printf("RESPONSE FROM VCENTER: %s\n", string(b))
 
 			var nic struct {
 				Value struct {
-					MacAddress   string `json:"mac_address"`
+					MacAddress string `json:"mac_address"`
 				} `json:"value"`
 			}
 
 			err = json.Unmarshal(b, &nic)
 			if err != nil {
-				return Client{}, err
+				return err
 			}
 
 			fmt.Printf("Returned Data from vCenter: %+v\n", nic)
@@ -343,6 +343,15 @@ func GetClientByMacAddress(address string) (Client, error) {
 		}
 	}
 
+	return nil
+}
+
+func GetClientByMacAddress(address string) (*Client, error) {
+	err := InitializeCache(false)
+	if err != nil {
+		return nil, err
+	}
+
 	var ke string
 	for k, v := range VirtualMachineNetworkMacs {
 		if v == address {
@@ -351,25 +360,24 @@ func GetClientByMacAddress(address string) (Client, error) {
 			break
 		}
 	}
-	
+
 	if ke == "" {
-		fmt.Printf("Unable to find vm for that mac")
-		return Client{}, nil
+		return nil, fmt.Errorf("unable to find vm with that mac address")
 	}
 
 	fields := strings.Fields(VirtualMachinesIds[ke])
 
 	if len(fields) < 3 {
-		return Client{}, fmt.Errorf("dat vm name no have enough parts")
+		return nil, fmt.Errorf("dat vm name no have enough parts")
 	}
 
 	team, err := strconv.Atoi(fields[1])
 
 	if err != nil {
-		return Client{}, err
+		return nil, err
 	}
 
-	c := Client{
+	c := &Client{
 		VMWareName: VirtualMachinesIds[ke],
 		VMWareId:   ke,
 		MacAddress: address,

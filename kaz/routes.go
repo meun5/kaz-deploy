@@ -2,7 +2,9 @@ package kaz
 
 import (
 	"fmt"
+	"github.com/flosch/pongo2"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func routes(s *Server) error {
@@ -13,7 +15,17 @@ func routes(s *Server) error {
 	}
 
 	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Hallo!")
+		c.HTML(200, "index.html", pongo2.Context{
+			"title": "TEAMS",
+		})
+	})
+
+	r.GET("/cache", func(c *gin.Context) {
+		err := InitializeCache(true)
+		c.HTML(200, "success.html", pongo2.Context{
+			"title": "CACHE",
+			"error": err,
+		})
 	})
 
 	t := r.Group("/clients")
@@ -28,22 +40,25 @@ func routes(s *Server) error {
 
 			if err != nil {
 				l.Printf("Error Binding Params: %+v", err)
+				c.JSON(http.StatusBadRequest, err)
 			}
 			l.Printf("Bound Params: %+v", x)
 
 			h, err := GetClientByMacAddress(x.MacAddress)
 			if err != nil {
 				c.String(500, "Unable to complete request: %+v", err)
+				return
+			}
+
+			h.CheckedIn = true
+
+			err = CommitClient(h, s)
+			if err != nil {
+				c.String(500, "Unable to complete request: %+v", err)
+				return
 			}
 
 			c.JSON(200, h)
-
-			return
-
-			err = CommitClient(&h, s)
-			if err != nil {
-				c.String(500, "Unable to complete request: %+v", err)
-			}
 		})
 	}
 

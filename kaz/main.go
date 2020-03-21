@@ -4,23 +4,25 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+
+	"gitlab.com/go-box/pongo2gin"
 	"log"
 	"os"
 	"time"
 )
 
 type Server struct {
-	Port int
-	Address string
+	Port        int
+	Address     string
 	ReleaseMode string
-	Engine *gin.Engine
-	Logger *log.Logger
-	Db *gorm.DB
+	Engine      *gin.Engine
+	Logger      *log.Logger
+	Db          *gorm.DB
 }
 
 const (
 	Release string = gin.ReleaseMode
-	Debug string = gin.DebugMode
+	Debug   string = gin.DebugMode
 )
 
 func (s *Server) Run() {
@@ -35,7 +37,10 @@ func (s *Server) Run() {
 	gin.SetMode(s.ReleaseMode)
 
 	r := gin.Default()
+	r.HTMLRender = pongo2gin.Default()
 	s.Engine = r
+
+	r.Static("/static", "static")
 
 	err := InitializeDatabase(s)
 	if err != nil {

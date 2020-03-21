@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h2 class="{% if err == nil %}text-success{% else %}text-danger{% endif %}">
+        {% if err == nil %}Success{% else %}Error{% endif %}
+    </h2>
+    {% if err != nil %}
+        <pre>{{ err }}</pre>
+    {% endif %}
+    <a href="/" class="btn btn-info">Back</a>
+</div>
+{% endblock %}

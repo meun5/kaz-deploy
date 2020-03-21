@@ -1,3 +1,6 @@
+# github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
+## explicit
+github.com/flosch/pongo2
 # github.com/gin-contrib/sse v0.1.0
 github.com/gin-contrib/sse
 # github.com/gin-gonic/gin v1.5.0
@@ -21,6 +24,8 @@ github.com/jinzhu/gorm/dialects/sqlite
 github.com/jinzhu/inflection
 # github.com/json-iterator/go v1.1.7
 github.com/json-iterator/go
+# github.com/juju/errors v0.0.0-20181118221551-089d3ea4e4d5
+github.com/juju/errors
 # github.com/leodido/go-urn v1.1.0
 github.com/leodido/go-urn
 # github.com/mattn/go-isatty v0.0.9
@@ -35,21 +40,9 @@ github.com/modern-go/reflect2
 github.com/ugorji/go/codec
 # github.com/vmware/govmomi v0.22.2
 ## explicit
-github.com/vmware/govmomi
-github.com/vmware/govmomi/nfc
-github.com/vmware/govmomi/object
-github.com/vmware/govmomi/property
-github.com/vmware/govmomi/session
-github.com/vmware/govmomi/task
-github.com/vmware/govmomi/view
-github.com/vmware/govmomi/vim25
-github.com/vmware/govmomi/vim25/debug
-github.com/vmware/govmomi/vim25/methods
-github.com/vmware/govmomi/vim25/mo
-github.com/vmware/govmomi/vim25/progress
-github.com/vmware/govmomi/vim25/soap
-github.com/vmware/govmomi/vim25/types
-github.com/vmware/govmomi/vim25/xml
+# gitlab.com/go-box/pongo2gin v0.0.0-20180611101114-fb2c4f0fe00f
+## explicit
+gitlab.com/go-box/pongo2gin
 # golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a
 golang.org/x/sys/unix
 # gopkg.in/go-playground/validator.v9 v9.29.1
