@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const ChunkSize = 4
+
 func routes(s *Server) error {
 	r := s.Engine
 	l := s.Logger
@@ -19,9 +21,12 @@ func routes(s *Server) error {
 		var clients []Client
 		s.Db.Where(&Client{CheckedIn: true}).Find(&clients)
 
+		chunked := ChunkSlice(clients, ChunkSize)
+
 		c.HTML(200, "index.html", pongo2.Context{
-			"title":   "TEAMS",
-			"clients": clients,
+			"title":        "TEAMS",
+			"clientChunks": chunked,
+			"colSize":      12 / ChunkSize,
 		})
 	})
 

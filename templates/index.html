@@ -5,12 +5,17 @@
     <div class="row">
         <div class="col">
             <h3>Checked In Clients</h3>
-            {% for client in clients %}
-                <span class="bgc-green">{{ client.VMWareName }}</span>
+            {% for clients in clientChunks %}
+                <div class="row">
+                    {% for client in clients %}
+                        <div class="col-{{ colSize }}">
+                            <span class="bgc-green">{{ client.VMWareName }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endfor %}
         </div>
-        <div class="col"></div>
-        <div class="col">
+        <div class="col-4">
             <a href="/cache" class="btn btn-info">Initialize VM Cache</a>
         </div>
     </div>
