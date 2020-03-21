@@ -44,6 +44,14 @@ func routes(s *Server) error {
 			}
 			l.Printf("Bound Params: %+v", x)
 
+			var w Client
+			s.Db.Where(&Client{MacAddress: x.MacAddress}).First(&w)
+
+			if w.CheckedIn {
+				c.JSON(200, w)
+				return
+			}
+
 			h, err := GetClientByMacAddress(x.MacAddress)
 			if err != nil {
 				c.String(500, "Unable to complete request: %+v", err)

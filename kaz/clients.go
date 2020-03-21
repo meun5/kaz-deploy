@@ -20,11 +20,11 @@ type Group struct {
 
 type Client struct {
 	VMWareName string
-	VMWareId   string
-	MacAddress string
+	VMWareId   string `gorm:"unique;not null"`
+	MacAddress string `gorm:"unique;not null"`
 	Team       int
 	Group      Group
-	CheckedIn  bool
+	CheckedIn  bool `gorm:"unique;not null;default:false"`
 	gorm.Model
 }
 
